@@ -480,6 +480,61 @@ function renderUI() {
       ${cfg ? `<button class="del" data-i="${r.i}" title="Elimina">✕</button>` : '<span></span>'}
     </li>`).join('');
   $('log-empty').classList.toggle('hidden', runs.length > 0);
+  renderSummary();
+}
+
+
+/* ---- riepilogo ---- */
+const DAY = 864e5;
+const toDate = d => new Date(d + 'T12:00:00');
+function renderSummary() {
+  const set = (id, v) => { $(id).textContent = v; };
+  const now = new Date(); now.setHours(12, 0, 0, 0);
+  if (!runs.length) {
+    ['r-best', 'r-last', 'r-pace', 'r-eta'].forEach(id => set(id, '–'));
+    ['r-best-d', 'r-last-d', 'r-week-n', 'r-month-n'].forEach(id => set(id, ''));
+    set('r-week', '0 km'); set('r-month', '0 km');
+    $('months').innerHTML = '<p class="empty">Il grafico si riempie con le prime corse!</p>';
+    return;
+  }
+  const best = runs.reduce((a, b) => b.km > a.km ? b : a);
+  set('r-best', fmt(best.km) + ' km'); set('r-best-d', fmtDate(best.date).toLowerCase());
+
+  const monday = new Date(now); monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  const wk = runs.filter(r => toDate(r.date) >= monday && toDate(r.date) <= now);
+  set('r-week', fmt(sumKm(wk)) + ' km'); set('r-week-n', wk.length + (wk.length === 1 ? ' corsa' : ' corse'));
+  const ym = now.toISOString().slice(0, 7);
+  const mo = runs.filter(r => r.date.startsWith(ym));
+  set('r-month', fmt(sumKm(mo)) + ' km'); set('r-month-n', mo.length + (mo.length === 1 ? ' corsa' : ' corse'));
+
+  const last = runs[runs.length - 1];
+  const ago = Math.round((now - toDate(last.date)) / DAY);
+  set('r-last', fmt(last.km) + ' km');
+  set('r-last-d', ago <= 0 ? 'oggi' : ago === 1 ? 'ieri' : ago + ' giorni fa');
+
+  const first = toDate(runs[0].date);
+  const weeks = Math.max(1, (now - first) / DAY / 7);
+  const pace = total / weeks;
+  set('r-pace', fmt(pace));
+  if (total >= GOAL_KM) { set('r-eta', 'ARRIVATO!'); set('r-eta-d', 'il ' + fmtDate(last.date).toLowerCase()); }
+  else if (pace > 0 && runs.length >= 2) {
+    const eta = new Date(now.getTime() + (GOAL_KM - total) / pace * 7 * DAY);
+    set('r-eta', eta.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: '2-digit' }).toUpperCase());
+    set('r-eta-d', 'al ritmo attuale');
+  } else { set('r-eta', '…'); set('r-eta-d', 'servono almeno 2 corse'); }
+
+  // km per mese, dal primo mese a oggi
+  const months = [];
+  const d = new Date(first.getFullYear(), first.getMonth(), 1);
+  const end = new Date(Math.max(now, toDate(last.date)));
+  while (d <= end) { months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`); d.setMonth(d.getMonth() + 1); }
+  const vals = months.map(m => sumKm(runs.filter(r => r.date.startsWith(m))));
+  const max = Math.max(...vals, 1);
+  $('months').innerHTML = months.map((m, i) => {
+    const lbl = new Date(m + '-15T12:00:00').toLocaleDateString('it-IT', { month: 'short', year: '2-digit' }).toUpperCase();
+    return `<div class="month"><span class="mv">${fmt(vals[i])}</span><div class="mb" style="height:${Math.round(vals[i] / max * 110)}px"></div><span class="ml">${lbl}</span></div>`;
+  }).join('');
+  $('months').scrollLeft = 1e6;
 }
 
 let toastT;

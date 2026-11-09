@@ -89,6 +89,22 @@ main{max-width:1100px;margin:0 auto;padding:0 16px 24px}
 .msg{font-size:30px;text-align:center;margin:18px 0 4px;color:var(--ink)}
 .next{font-size:24px;text-align:center;margin:0;color:var(--muted)}
 
+/* ---------- summary ---------- */
+.summary{padding:20px 22px 24px;margin-bottom:24px}
+.summary h2{font-family:var(--pix);font-weight:400;font-size:14px;margin:0 0 18px;color:var(--gold)}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sum{background:#231a42;padding:12px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 0 0 3px #3b2e6e}
+.sum .lbl{font-size:9px}
+.sum .v{font-family:var(--pix);font-size:clamp(13px,1.8vw,18px);color:var(--ink)}
+.sum .sd{color:var(--muted);font-size:20px}
+.sub-h{font-family:var(--pix);font-weight:400;font-size:10px;color:var(--muted);margin:24px 0 12px}
+.months{display:flex;align-items:flex-end;gap:10px;height:170px;overflow-x:auto;padding-bottom:4px}
+.month{flex:1 0 48px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.month .mv{font-size:20px;color:var(--gold)}
+.month .mb{width:100%;max-width:56px;background:repeating-linear-gradient(0deg,#ff7aa8 0 10px,#e0577f 10px 12px);box-shadow:inset 0 4px 0 #ffffff40,0 0 0 3px var(--line);min-height:4px}
+.month .ml{font-family:var(--pix);font-size:8px;color:var(--muted)}
+.months .empty{width:100%;align-self:center}
+
 /* ---------- log ---------- */
 .log{padding:20px 22px 22px}
 .log-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
@@ -148,6 +164,7 @@ dialog .row{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin
 @media (max-width:700px){
   body{font-size:20px}
   .hud{grid-template-columns:repeat(2,1fr);gap:18px}
+  .sum-grid{grid-template-columns:repeat(2,1fr)}
   #log-list li{grid-template-columns:1fr auto;grid-template-areas:"d del" "k c"}
   #log-list .d{grid-area:d}#log-list .k{grid-area:k}#log-list .c{grid-area:c;text-align:right}#log-list .del{grid-area:del}
   .px-heart{width:28px;height:24px;margin:0 10px}
