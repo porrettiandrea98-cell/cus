@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIENTE MI DIVIDE DA CUS</title>
+<meta name="description" content="Roma → Milano, 480 km di corsa per raggiungere la mia principessa.">
+<meta name="theme-color" content="#1d1433">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 6' shape-rendering='crispEdges'><g fill='%23e83b3b'><rect x='1' y='0' width='2' height='1'/><rect x='4' y='0' width='2' height='1'/><rect x='0' y='1' width='7' height='2'/><rect x='1' y='3' width='5' height='1'/><rect x='2' y='4' width='3' height='1'/><rect x='3' y='5' width='1' height='1'/></g></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="title">
+  <h1>
+    <span class="t1">NIENTE MI DIVIDE</span>
+    <span class="t2"><i class="px-heart"></i>DA CUS<i class="px-heart"></i></span>
+  </h1>
+  <p class="sub">ROMA <b>➜</b> MILANO · 480 KM DI CORSA · 1 PRINCIPESSA</p>
+</header>
+
+<main>
+  <section class="stage-wrap pixel-box">
+    <canvas id="stage" aria-label="Il percorso da Roma a Milano"></canvas>
+  </section>
+  <p class="hint">← trascina il livello per esplorare il percorso →</p>
+
+  <section class="hud">
+    <div class="stat pixel-box"><span class="lbl">KM FATTI</span><span id="s-done" class="val">0</span></div>
+    <div class="stat pixel-box"><span class="lbl">MANCANO</span><span id="s-left" class="val">480</span></div>
+    <div class="stat pixel-box"><span class="lbl">CORSE</span><span id="s-runs" class="val">0</span></div>
+    <div class="stat pixel-box"><span class="lbl">MEDIA</span><span id="s-avg" class="val">0</span></div>
+  </section>
+
+  <section class="progress pixel-box">
+    <div class="bar">
+      <div id="bar-fill"></div>
+      <img id="bar-runner" alt="">
+      <i class="px-heart bar-heart"></i>
+    </div>
+    <div class="bar-labels"><span>ROMA</span><span id="pct">0%</span><span>MILANO</span></div>
+    <p id="msg" class="msg"></p>
+    <p id="next" class="next"></p>
+  </section>
+
+  <section class="log pixel-box">
+    <div class="log-head">
+      <h2>DIARIO DI CORSA</h2>
+      <button id="btn-add" class="btn hidden" type="button">+ CORSA</button>
+    </div>
+    <ol id="log-list"></ol>
+    <p id="log-empty" class="empty">Nessuna corsa ancora… il viaggio sta per iniziare!</p>
+  </section>
+</main>
+
+<footer>
+  <span>Fatto con <i class="px-heart small"></i> per Chiara</span>
+  <button id="btn-settings" class="gear" type="button" title="Impostazioni">⚙</button>
+</footer>
+
+<!-- Nuova corsa -->
+<dialog id="dlg-add" class="pixel-box">
+  <form id="form-add" method="dialog">
+    <h3>NUOVA CORSA</h3>
+    <label>Data<input type="date" name="date" required></label>
+    <label>Km percorsi<input type="text" name="km" inputmode="decimal" pattern="[0-9]+([.,][0-9]{1,2})?" placeholder="es. 7,5" required autocomplete="off"></label>
+    <label>Nota (facoltativa)<input type="text" name="note" maxlength="80" placeholder="es. lungo Tevere, pioggia!"></label>
+    <div class="row">
+      <button type="button" class="btn ghost" data-close>ANNULLA</button>
+      <button type="submit" class="btn">SALVA</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Impostazioni GitHub -->
+<dialog id="dlg-settings" class="pixel-box">
+  <form id="form-settings" method="dialog">
+    <h3>COLLEGA GITHUB</h3>
+    <p class="small-txt">Serve solo a te per aggiungere le corse dal sito. Il token resta salvato in questo browser e non viene mai pubblicato.</p>
+    <label>Utente GitHub<input name="owner" required placeholder="es. mariorossi" autocomplete="off"></label>
+    <label>Repository<input name="repo" required placeholder="es. niente-mi-divide-da-cus" autocomplete="off"></label>
+    <label>Branch<input name="branch" required value="main" autocomplete="off"></label>
+    <label>Token (fine-grained, Contents: read &amp; write)<input name="token" type="password" required placeholder="github_pat_…" autocomplete="off"></label>
+    <div class="row">
+      <button type="button" class="btn ghost" id="btn-logout">SCOLLEGA</button>
+      <button type="button" class="btn ghost" data-close>CHIUDI</button>
+      <button type="submit" class="btn">SALVA</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
